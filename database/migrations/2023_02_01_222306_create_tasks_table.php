@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('completed');
             $table->foreignId('user_id')->constrained();
+            $table->datetime('deadline');
             $table->timestamps();
         });
     }

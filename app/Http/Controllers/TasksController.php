@@ -87,4 +87,35 @@ class TasksController extends Controller
         }
         return response()->json("success", 200);
     }
+
+    public function completed(Request $request) 
+    {
+        $user_id = $request->input('user');
+        $tasks = Tasks::where("completed", 1)
+        ->when($user_id, function($query, $user_id) {
+            return $query->where("user_id", $user_id);
+        })
+        ->get();
+        if (count($tasks) == 0)
+        {
+            return response()->json("Not results!", 204);
+        }
+        return response()->json($tasks, 200);
+    }
+
+    public function search(Request $request, $str) 
+    {
+        $user_id = $request->input('user');
+        $filter = sprintf("%%%s%%", $str);
+        $tasks = Tasks::where("name", "LIKE", $filter)
+        ->when($user_id, function($query, $user_id) {
+            return $query->where("user_id", $user_id);
+        })
+        ->get();
+        if (count($tasks) == 0)
+        {
+            return response()->json("Not results!", 204);
+        }
+        return response()->json($tasks, 200);
+    }
 }

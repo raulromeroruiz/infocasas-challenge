@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class ExampleMiddleware
+class ValidateMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,6 +15,9 @@ class ExampleMiddleware
      */
     public function handle($request, Closure $next)
     {
+        if (! $request->ajax()) {
+            return response('Forbidden.', 403);
+        }
         return $next($request);
     }
 }
